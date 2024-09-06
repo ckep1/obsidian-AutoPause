@@ -1,13 +1,11 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-// Remember to rename these classes and interfaces!
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 interface AudioPausePluginSettings {
-	mySetting: string;
+	resetToBeginning: boolean;
 }
 
 const DEFAULT_SETTINGS: AudioPausePluginSettings = {
-	mySetting: 'default'
+	resetToBeginning: false
 }
 
 export default class AudioPausePlugin extends Plugin {
@@ -29,8 +27,7 @@ export default class AudioPausePlugin extends Plugin {
 			}
 		}, true);
 
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new AudioPauseSettingTab(this.app, this));
 	}
 
 	onunload() {
@@ -49,12 +46,15 @@ export default class AudioPausePlugin extends Plugin {
 		this.audioElements.forEach(audio => {
 			if (audio !== currentAudio && !audio.paused) {
 				audio.pause();
+				if (this.settings.resetToBeginning) {
+					audio.currentTime = 0;
+				}
 			}
 		});
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class AudioPauseSettingTab extends PluginSettingTab {
 	plugin: AudioPausePlugin;
 
 	constructor(app: App, plugin: AudioPausePlugin) {
@@ -68,13 +68,12 @@ class SampleSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
+			.setName('Reset to beginning')
+			.setDesc('When enabled, other audio clips will be reset to the beginning instead of just pausing.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.resetToBeginning)
 				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
+					this.plugin.settings.resetToBeginning = value;
 					await this.plugin.saveSettings();
 				}));
 	}
