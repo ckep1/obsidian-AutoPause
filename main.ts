@@ -15,8 +15,6 @@ export default class AudioPausePlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		console.log('Loading AudioPausePlugin');
-
 		this.registerDomEvent(document, 'play', (evt: Event) => {
 			const target = evt.target as HTMLAudioElement;
 			if (target instanceof HTMLAudioElement) {
@@ -31,7 +29,6 @@ export default class AudioPausePlugin extends Plugin {
 	}
 
 	onunload() {
-		console.log('Unloading AudioPausePlugin');
 	}
 
 	async loadSettings() {

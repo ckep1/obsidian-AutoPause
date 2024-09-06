@@ -3,7 +3,7 @@
 	"name": "AutoPause",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Automatically pauses playing audio when a new clip is played, with the option to reset to the beginning instead of just pausing.",
+	"description": "Allows one audio track to be played at a time, pausing or stopping any others.",
 	"author": "Chris Kephart",
 	"authorUrl": "https://github.com/ckep1",
 	"isDesktopOnly": false
