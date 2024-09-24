@@ -16,7 +16,7 @@ export default class AudioPausePlugin extends Plugin {
 		await this.loadSettings();
 
 		this.registerDomEvent(document, 'play', (evt: Event) => {
-			const target = evt.target as HTMLAudioElement;
+			const target = evt.target;
 			if (target instanceof HTMLAudioElement) {
 				this.pauseOtherAudio(target);
 				if (!this.audioElements.includes(target)) {
